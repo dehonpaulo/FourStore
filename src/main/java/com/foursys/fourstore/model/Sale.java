@@ -16,18 +16,21 @@ public class Sale {
     @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL)
     private List<SaleItem> items;
     @ManyToOne
-    @JoinColumn(name = "id_customer")
-    private Customer customer;
+    @JoinColumn(name = "id_user", nullable = false)
+    private User user;
+    @Column(nullable = false)
     private Double totalPrice;
+    @Column(nullable = false)
     private LocalDateTime dateTime;
+    @Column(nullable = false)
     private PaymentMethod paymentMethod;
 
     public Sale(){};
 
-    public Sale(Long id, List<SaleItem> items, Customer customer, Double totalPrice, LocalDateTime dateTime, PaymentMethod paymentMethod) {
+    public Sale(Long id, List<SaleItem> items, User user, Double totalPrice, LocalDateTime dateTime, PaymentMethod paymentMethod) {
         this.id = id;
         this.items = items;
-        this.customer = customer;
+        this.user = user;
         this.totalPrice = totalPrice;
         this.dateTime = dateTime;
         this.paymentMethod = paymentMethod;
@@ -49,12 +52,12 @@ public class Sale {
         this.items = items;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public User getUser() {
+        return user;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Double getTotalPrice() {

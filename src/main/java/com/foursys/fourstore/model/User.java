@@ -4,11 +4,11 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "customers")
-public class Customer {
+@Table(name = "users")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_customer", nullable = false)
+    @Column(name = "id_user", nullable = false)
     private Long id;
     @Column(name = "full_name", nullable = false)
     private String fullName;
@@ -18,17 +18,20 @@ public class Customer {
     private String email;
     @Column(nullable = false)
     private String password;
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Address> adresses;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Sale> sales;
 
-    public Customer(){};
+    public User(){};
 
-    public Customer(Long id, String fullName, String cpf, String email, String password, List<Sale> sales) {
+    public User(Long id, String fullName, String cpf, String email, String password, List<Address> adresses, List<Sale> sales) {
         this.id = id;
         this.fullName = fullName;
         this.cpf = cpf;
         this.email = email;
         this.password = password;
+        this.adresses = adresses;
         this.sales = sales;
     }
 
@@ -70,6 +73,14 @@ public class Customer {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<Address> getAdresses() {
+        return adresses;
+    }
+
+    public void setAdresses(List<Address> adresses) {
+        this.adresses = adresses;
     }
 
     public List<Sale> getSales() {

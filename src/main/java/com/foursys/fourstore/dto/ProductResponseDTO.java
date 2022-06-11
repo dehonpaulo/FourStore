@@ -1,18 +1,21 @@
 package com.foursys.fourstore.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.foursys.fourstore.enums.*;
 import com.foursys.fourstore.model.Product;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProductResponseDTO {
     private Long id;
     private String brand;
     private String description;
-    private String type;
-    private String category;
+    private Type type;
+    private Category category;
     private String modelCode;
-    private String color;
-    private String sex;
-    private String size;
-    private String fit;
+    private Color color;
+    private Sex sex;
+    private Size size;
+    private Fit fit;
     private Double purchasePrice;
     private Double salePrice;
     private Integer quantity;
@@ -20,34 +23,17 @@ public class ProductResponseDTO {
 
     public ProductResponseDTO(){};
 
-    public ProductResponseDTO(Long id, String brand, String description, String type, String category, String modelCode, String color, String sex, String size, String fit, Double purchasePrice, Double salePrice, Integer quantity, String sku) {
-        this.id = id;
-        this.brand = brand;
-        this.description = description;
-        this.type = type;
-        this.category = category;
-        this.modelCode = modelCode;
-        this.color = color;
-        this.sex = sex;
-        this.size = size;
-        this.fit = fit;
-        this.purchasePrice = purchasePrice;
-        this.salePrice = salePrice;
-        this.quantity = quantity;
-        this.sku = sku;
-    }
-
     public ProductResponseDTO(Product product) {
         this.id = product.getId();
         this.brand = product.getBrand().getName();
         this.description = product.getDescription();
-        this.type = product.getType().getValue();
-        this.category = product.getCategory().getValue();
+        this.type = product.getType();
+        this.category = product.getCategory();
         this.modelCode = product.getModelCode();
-        this.color = product.getColor().getValue();
-        this.sex = product.getSex().toString();
-        this.size = product.getSize().toString();
-        this.fit = product.getFit().getValue();
+        this.color = product.getColor();
+        this.sex = product.getSex();
+        this.size = product.getSize();
+        this.fit = product.getFit();
         this.purchasePrice = product.getPurchasePrice();
         this.salePrice = product.getSalePrice();
         this.quantity = product.getQuantity();
@@ -78,19 +64,19 @@ public class ProductResponseDTO {
         this.description = description;
     }
 
-    public String getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Type type) {
         this.type = type;
     }
 
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 
@@ -102,35 +88,35 @@ public class ProductResponseDTO {
         this.modelCode = modelCode;
     }
 
-    public String getColor() {
+    public Color getColor() {
         return color;
     }
 
-    public void setColor(String color) {
+    public void setColor(Color color) {
         this.color = color;
     }
 
-    public String getSex() {
+    public Sex getSex() {
         return sex;
     }
 
-    public void setSex(String sex) {
+    public void setSex(Sex sex) {
         this.sex = sex;
     }
 
-    public String getSize() {
+    public Size getSize() {
         return size;
     }
 
-    public void setSize(String size) {
+    public void setSize(Size size) {
         this.size = size;
     }
 
-    public String getFit() {
+    public Fit getFit() {
         return fit;
     }
 
-    public void setFit(String fit) {
+    public void setFit(Fit fit) {
         this.fit = fit;
     }
 

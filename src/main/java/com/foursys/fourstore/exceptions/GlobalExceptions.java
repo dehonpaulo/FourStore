@@ -21,4 +21,10 @@ public class GlobalExceptions {
         StandardError se = new StandardError(Instant.now(), 422, "Unreported essential field", ex.getMessage(), request.getRequestURI());
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(se);
     }
+
+    @ExceptionHandler(InvalidValueException.class)
+    public ResponseEntity<StandardError> InvalidValueHandlerMethod(InvalidValueException ex, HttpServletRequest request) {
+        StandardError se = new StandardError(Instant.now(), 400, "Invalid value field", ex.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(se);
+    }
 }

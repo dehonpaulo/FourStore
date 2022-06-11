@@ -12,15 +12,21 @@ public class SaleItem {
     @ManyToOne
     @JoinColumn(name = "id_product", nullable = false)
     private Product product;
+    @Column(nullable = false)
     private Integer quantity;
     @ManyToOne
-    @JoinColumn(name = "id_sale")
+    @JoinColumn(name = "id_sale", nullable = false)
     private Sale sale;
 
     public SaleItem(){};
 
     public SaleItem(Long id, Product product, Integer quantity) {
         this.id = id;
+        this.product = product;
+        this.quantity = quantity;
+    }
+
+    public SaleItem(Product product, Integer quantity) {
         this.product = product;
         this.quantity = quantity;
     }
@@ -47,5 +53,13 @@ public class SaleItem {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public Sale getSale() {
+        return sale;
+    }
+
+    public void setSale(Sale sale) {
+        this.sale = sale;
     }
 }

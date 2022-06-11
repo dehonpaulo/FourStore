@@ -2,6 +2,7 @@ package com.foursys.fourstore.enums;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public enum Size {
     PP,
@@ -18,8 +19,8 @@ public enum Size {
         }
     }
 
-    public static Size getFromString(String size) {
-        if(!sizeMap.containsKey(size)) return null;
-        return sizeMap.get(size);
+    public static Optional<Size> getFromString(String size) {
+        if(!sizeMap.containsKey(size)) return Optional.empty();
+        return Optional.of(sizeMap.get(size));
     }
 }

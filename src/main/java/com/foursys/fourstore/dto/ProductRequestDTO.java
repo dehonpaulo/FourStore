@@ -1,6 +1,7 @@
 package com.foursys.fourstore.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.foursys.fourstore.enums.*;
 import com.foursys.fourstore.model.Product;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -8,46 +9,30 @@ public class ProductRequestDTO {
     private Long id;
     private Long idBrand;
     private String description;
-    private Long idType;
-    private Long idCategory;
+    private Type type;
+    private Category category;
     private String modelCode;
-    private Long idColor;
-    private String sex;
-    private String size;
-    private Long idFit;
+    private Color color;
+    private Sex sex;
+    private Size size;
+    private Fit fit;
     private Double purchasePrice;
     private Double salePrice;
     private Integer quantity;
 
     public ProductRequestDTO() {}
 
-    public ProductRequestDTO(Long id, Long idBrand, String description, Long idType, Long idCategory, String modelCode, Long idColor, String sex, String size, Long idFit, Double purchasePrice, Double salePrice, Integer quantity) {
-        this.id = id;
-        this.idBrand = idBrand;
-        this.description = description;
-        this.idType = idType;
-        this.idCategory = idCategory;
-        this.modelCode = modelCode;
-        this.idColor = idColor;
-        this.sex = sex;
-        this.size = size;
-        this.idFit = idFit;
-        this.purchasePrice = purchasePrice;
-        this.salePrice = salePrice;
-        this.quantity = quantity;
-    }
-
     public ProductRequestDTO(Product product) {
         this.id = product.getId();
         this.idBrand = product.getBrand().getId();
         this.description = product.getDescription();
-        this.idType = product.getType().getId();
-        this.idCategory = product.getCategory().getId();
+        this.type = product.getType();
+        this.category = product.getCategory();
         this.modelCode = product.getModelCode();
-        this.idColor = product.getColor().getId();
-        this.sex = product.getSex().toString();
-        this.size = product.getSize().toString();
-        this.idFit = product.getFit().getId();
+        this.color = product.getColor();
+        this.sex = product.getSex();
+        this.size = product.getSize();
+        this.fit = product.getFit();
         this.purchasePrice = product.getPurchasePrice();
         this.salePrice = product.getSalePrice();
         this.quantity = product.getQuantity();
@@ -77,20 +62,20 @@ public class ProductRequestDTO {
         this.description = description;
     }
 
-    public Long getIdType() {
-        return idType;
+    public Type getType() {
+        return type;
     }
 
-    public void setIdType(Long idType) {
-        this.idType = idType;
+    public void setType(Type type) {
+        this.type = type;
     }
 
-    public Long getIdCategory() {
-        return idCategory;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setIdCategory(Long idCategory) {
-        this.idCategory = idCategory;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public String getModelCode() {
@@ -101,36 +86,36 @@ public class ProductRequestDTO {
         this.modelCode = modelCode;
     }
 
-    public Long getIdColor() {
-        return idColor;
+    public Color getColor() {
+        return color;
     }
 
-    public void setIdColor(Long idColor) {
-        this.idColor = idColor;
+    public void setColor(Color color) {
+        this.color = color;
     }
 
-    public String getSex() {
+    public Sex getSex() {
         return sex;
     }
 
-    public void setSex(String sex) {
+    public void setSex(Sex sex) {
         this.sex = sex;
     }
 
-    public String getSize() {
+    public Size getSize() {
         return size;
     }
 
-    public void setSize(String size) {
+    public void setSize(Size size) {
         this.size = size;
     }
 
-    public Long getIdFit() {
-        return idFit;
+    public Fit getFit() {
+        return fit;
     }
 
-    public void setIdFit(Long idFit) {
-        this.idFit = idFit;
+    public void setFit(Fit fit) {
+        this.fit = fit;
     }
 
     public Double getPurchasePrice() {

@@ -11,4 +11,5 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
     Long countProductsByBrand(Brand brand);
+    Product findBySku(String sku);
 }

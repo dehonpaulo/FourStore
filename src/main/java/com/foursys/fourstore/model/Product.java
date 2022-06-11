@@ -1,7 +1,6 @@
 package com.foursys.fourstore.model;
 
-import com.foursys.fourstore.enums.Sex;
-import com.foursys.fourstore.enums.Size;
+import com.foursys.fourstore.enums.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -17,24 +16,21 @@ public class Product {
     @JoinColumn(name = "id_brand", nullable = false)
     private Brand brand;
     private String description;
-    @ManyToOne
-    @JoinColumn(name="id_type")
+    @Enumerated(EnumType.STRING)
     private Type type;
-    @ManyToOne
-    @JoinColumn(name = "id_category")
+    @Enumerated(EnumType.STRING)
     private Category category;
     @Column(name = "model_code", nullable = false)
     private String modelCode;
-    @ManyToOne
-    @JoinColumn(name = "id_color", nullable = false)
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Color color;
     @Enumerated(EnumType.STRING)
     private Sex sex;
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Size size;
-    @ManyToOne
-    @JoinColumn(name = "id_fit")
+    @Enumerated(EnumType.STRING)
     private Fit fit;
     private String sku;
     @Column(name = "purchase_price", nullable = false)

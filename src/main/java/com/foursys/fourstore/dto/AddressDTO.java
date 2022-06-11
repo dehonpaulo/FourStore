@@ -1,38 +1,27 @@
-package com.foursys.fourstore.model;
+package com.foursys.fourstore.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.foursys.fourstore.enums.State;
+import com.foursys.fourstore.model.Address;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
-@Entity
-@Table(name = "adresses")
-public class Address {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_address", nullable = false)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class AddressDTO {
     private Long id;
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
     private State state;
-    @Column(nullable = false)
     private String city;
-    @Column(nullable = false)
     private String district;
-    @Column(nullable = false)
     private String cep;
-    @Column(nullable = false)
     private String street;
-    @Column(nullable = false)
     private String complement;
-    @Column(nullable = false)
     private Integer number;
-    @ManyToOne
-    @JoinColumn(name = "id_user", nullable = false)
-    private User user;
 
-    public Address(){}
+    public AddressDTO(){}
 
-    public Address(Long id, State state, String city, String district, String cep, String street, String complement, Integer number, User user) {
+    public AddressDTO(Long id, State state, String city, String district, String cep, String street, String complement, Integer number) {
         this.id = id;
         this.state = state;
         this.city = city;
@@ -41,7 +30,17 @@ public class Address {
         this.street = street;
         this.complement = complement;
         this.number = number;
-        this.user = user;
+    }
+
+    public AddressDTO(Address address) {
+        this.id = address.getId();
+        this.state = address.getState();
+        this.city = address.getCity();
+        this.district = address.getDistrict();
+        this.cep = address.getCep();
+        this.street = address.getStreet();
+        this.complement = address.getComplement();
+        this.number = address.getNumber();
     }
 
     public Long getId() {
@@ -106,13 +105,5 @@ public class Address {
 
     public void setNumber(Integer number) {
         this.number = number;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }

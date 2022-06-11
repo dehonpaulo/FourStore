@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Random;
 
 @Service
 public class ProductService {
@@ -21,14 +20,6 @@ public class ProductService {
     private ProductRepository productRepository;
     @Autowired
     private BrandRepository brandRepository;
-    @Autowired
-    private TypeRepository typeRepository;
-    @Autowired
-    private CategoryRepository categoryRepository;
-    @Autowired
-    private ColorRepository colorRepository;
-    @Autowired
-    private FitRepository fitRepository;
 
     public ProductResponseDTO save(ProductRequestDTO productRequestDTO) {
         Product product = new Product();
@@ -40,44 +31,23 @@ public class ProductService {
 
         if(productRequestDTO.getDescription() != null) product.setDescription(productRequestDTO.getDescription());
 
-        if(productRequestDTO.getIdType() != null) {
-            product.setType(typeRepository.findById(productRequestDTO.getIdType()).orElseThrow(() -> {
-                return new EntityNotFoundException("O tipo informado não existe no banco de dados");
-            }));
-        }
+        if(productRequestDTO.getType() != null) product.setType(productRequestDTO.getType());
 
-        if(productRequestDTO.getIdCategory() != null) {
-            product.setCategory(categoryRepository.findById(productRequestDTO.getIdCategory()).orElseThrow(() -> {
-                return new EntityNotFoundException("A categoria informada não existe no banco de dados");
-            }));
-        }
+        if(productRequestDTO.getCategory() != null) product.setCategory(productRequestDTO.getCategory());
 
         String modelCode = String.valueOf(productRepository.countProductsByBrand(product.getBrand()) + 1);
         modelCode = "0".repeat(6 - modelCode.length()) + modelCode;
         product.setModelCode(modelCode);
         
-        if(productRequestDTO.getIdColor() == null) throw new UnreportedEssentialFieldException("Cor não informada");
-        product.setColor(colorRepository.findById(productRequestDTO.getIdColor()).orElseThrow(() -> {
-            return new EntityNotFoundException("A cor informada não existe no banco de dados");
-        }));
+        if(productRequestDTO.getColor() == null) throw new UnreportedEssentialFieldException("Cor não informada");
+        product.setColor(productRequestDTO.getColor());
 
-        if(productRequestDTO.getSex() != null) {
-            Sex sex = Sex.getFromString(productRequestDTO.getSex());
-            if(sex == null) throw new InvalidValueException("Sexo inválido");
-            product.setSex(sex);
-        }
+        if(productRequestDTO.getSex() != null) product.setSex(productRequestDTO.getSex());
 
-        if(productRequestDTO.getSize() != null) {
-            Size size = Size.getFromString(productRequestDTO.getSize());
-            if(size == null) throw new InvalidValueException("Sexo inválido");
-            product.setSize(size);
-        }
+        if(productRequestDTO.getSize() == null) throw new UnreportedEssentialFieldException("Tamanho não informado");
+        product.setSize(productRequestDTO.getSize());
 
-        if(productRequestDTO.getIdFit() != null) {
-            product.setFit(fitRepository.findById(productRequestDTO.getIdFit()).orElseThrow(() -> {
-                return new EntityNotFoundException("O fit informado não existe no banco de dados");
-            }));
-        }
+        if(productRequestDTO.getFit() != null) product.setFit(productRequestDTO.getFit());
 
         if(productRequestDTO.getPurchasePrice() == null) throw new UnreportedEssentialFieldException("Preço de compra não informado");
         if(productRequestDTO.getPurchasePrice() < 0) throw new InvalidValueException("Preço de compra inválido");
@@ -93,7 +63,7 @@ public class ProductService {
 
         product.setSku(product.getBrand().getCode()
                 + product.getModelCode()
-                + product.getColor().getCode()
+                + product.getColor().getColorNumber()
                 + product.getSize().toString());
 
         return new ProductResponseDTO(productRepository.save(product));
@@ -116,6 +86,14 @@ public class ProductService {
         }).toList();
     }
 
+    //--------------------------------------------------------------------------------
+
+    public ProductResponseDTO findBySku(String sku) {
+        Product product = productRepository.findBySku(sku);
+        if(product == null) throw new EntityNotFoundException("Não existe um produto com o sku informado");
+        return new ProductResponseDTO(product);
+    }
+
     //---------------------------------------------------------------------------------
 
     public void deleteById(Long id) {
@@ -131,7 +109,67 @@ public class ProductService {
         });
 
         if(productRequestDTO.getIdBrand() != null) product.setBrand(brandRepository.findById(productRequestDTO.getIdBrand()).orElseThrow(() -> {
-            return new EntityNotFoundException("");
+            return new EntityNotFoundException("A marca informada não existe no banco de dados");
         }));
+
+        if(productRequestDTO.getDescription() != null) product.setDescription(productRequestDTO.getDescription());
+
+        if(productRequestDTO.getType() != null) product.setType(productRequestDTO.getType());
+
+        if(productRequestDTO.getCategory() != null) product.setCategory(productRequestDTO.getCategory());
+
+        if(productRequestDTO.getColor() != null) product.setColor(productRequestDTO.getColor());
+
+        if(productRequestDTO.getSex() != null) product.setSex(productRequestDTO.getSex());
+
+        if(productRequestDTO.getSize() != null) product.setSize(productRequestDTO.getSize());
+
+        if(productRequestDTO.getFit() != null) product.setFit(productRequestDTO.getFit());
+
+        if(productRequestDTO.getPurchasePrice() != null) {
+            if(productRequestDTO.getPurchasePrice() < 0) throw new InvalidValueException("Preço de compra inválido");
+            product.setPurchasePrice(productRequestDTO.getPurchasePrice());
+        }
+
+        if(productRequestDTO.getSalePrice() != null) {
+            if(productRequestDTO.getSalePrice() < 0) throw new InvalidValueException("Preço de venda inválido");
+            product.setSalePrice(productRequestDTO.getSalePrice());
+        }
+
+        if(productRequestDTO.getQuantity() != null) {
+            if(productRequestDTO.getQuantity() < 0) throw new InvalidValueException("Quantidade inválida");
+            product.setQuantity(productRequestDTO.getQuantity());
+        }
+
+        product.setSku(product.getBrand().getCode()
+                + product.getModelCode()
+                + product.getColor().getColorNumber()
+                + product.getSize().toString());
+
+        return new ProductResponseDTO(productRepository.save(product));
+    }
+
+    public Integer supplyProductStockById(Long id, Integer quantity) {
+        Product product = productRepository.findById(id).orElseThrow(() -> {
+            return new EntityNotFoundException("Não existe um produto com o id informado");
+        });
+
+        if(quantity < 0) throw new InvalidValueException("Quantidade inválida");
+
+        Integer newQuantity = product.getQuantity() + quantity;
+        product.setQuantity(newQuantity);
+        productRepository.save(product);
+        return newQuantity;
+    }
+
+    public Integer supplyProductStockBySku(String sku, Integer quantity) {
+        Product product = productRepository.findBySku(sku);
+        if(product == null) throw new EntityNotFoundException("Não existe um produto com o sku informado");
+        if(quantity < 0) throw new InvalidValueException("Quantidade inválida");
+
+        Integer newQuantity = product.getQuantity() + quantity;
+        product.setQuantity(newQuantity);
+        productRepository.save(product);
+        return newQuantity;
     }
 }
